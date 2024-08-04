@@ -2,7 +2,7 @@ FROM golang:1.21
 
 WORKDIR /app
 
-COPY go.mod
+COPY go.mod ./
 
 COPY . ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o /roman-to-integer
