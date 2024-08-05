@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"fmt"
+	"encoding/json"
 	"html/template"
 	"net/http"
 	"roman-to-integer/lib"
@@ -11,6 +11,10 @@ import (
 type Content struct {
 	Title string
 	Body  string
+}
+
+type Response struct {
+	Message string `json:"message"`
 }
 
 func HelloPage(w http.ResponseWriter, r *http.Request) {
@@ -33,12 +37,16 @@ func ConverterPage(w http.ResponseWriter, r *http.Request) {
 		Body:  "this is roman converter page",
 	}
 	if r.Method == "POST" {
-		fmt.Println("haiiii from post")
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Failed to parse form data", http.StatusBadRequest)
+			return
+		}
 		text := r.FormValue("string")
 		convertedRoman := lib.RomanToInt(text)
 		str_roman := strconv.Itoa(convertedRoman)
 		data.Body = str_roman
-		tmpl, err := template.ParseFiles("views/helloworld.html")
+		tmpl, err := template.ParseFiles("views/roman.html")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -50,5 +58,23 @@ func ConverterPage(w http.ResponseWriter, r *http.Request) {
 		}
 		tmpl.Execute(w, "")
 
+	}
+}
+
+func RomanAjax(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Unable to parse form", http.StatusBadRequest)
+			return
+		}
+		text := r.FormValue("string")
+		convertedRoman := lib.RomanToInt(text)
+		str_roman := strconv.Itoa(convertedRoman)
+		response := Response{Message: str_roman}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	} else {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }

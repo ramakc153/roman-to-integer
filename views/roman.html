@@ -4,13 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+        $('#romanForm').submit(function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            var formData = $(this).serialize(); // Serialize the form data
+
+            $.ajax({
+                url: '/roman/process',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    // Assuming the response contains the result you want to display
+                    $('#roman').text(response.message);
+                    console.log("button clicked")
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors here
+                    $('#roman').text('An error occurred: ' + error);
+                }
+            });
+        });
+    });
+        </script>
+        
 </head>
 <body>
     <h1>this is post method roman</h1>
-    <form action="/roman" method="POST">
+    <form action="/roman" id="romanForm" method="POST">
         <input type="text" name="string"><br />
-        <button type="submit">Submit button</button>
+        <button type="submit" id="convert">Submit button</button>
     </form>
+    <h1 id="roman">This is the result: </h1>
     
 </body>
 </html>
