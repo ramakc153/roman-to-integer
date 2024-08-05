@@ -12,6 +12,7 @@ func main() {
 	// fmt.Printf("the %s when converted to int is %d", text, number)
 	http.HandleFunc("/", routes.HelloPage)
 	http.HandleFunc("/roman", routes.ConverterPage)
+	http.HandleFunc("/roman/process", routes.RomanAjax)
 	addr := ":8080"
 	fmt.Println("http server served on ", addr)
 	http.ListenAndServe(addr, nil)
