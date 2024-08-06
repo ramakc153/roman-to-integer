@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"roman-to-integer/routes"
 )
@@ -14,7 +14,7 @@ func main() {
 	http.HandleFunc("/roman", routes.ConverterPage)
 	http.HandleFunc("/roman/process", routes.RomanAjax)
 	addr := ":8080"
-	fmt.Println("http server served on ", addr)
+	log.Println("http server served on ", addr)
 	http.ListenAndServe(addr, nil)
 
 }
