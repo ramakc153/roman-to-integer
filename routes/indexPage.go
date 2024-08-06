@@ -17,13 +17,13 @@ type Response struct {
 	Message string `json:"message"`
 }
 
-func HelloPage(w http.ResponseWriter, r *http.Request) {
+func HomePage(w http.ResponseWriter, r *http.Request) {
 	// tmpl, err := template.ParseFiles(path.Join("views", "helloworld.html"))
 	data := Content{
 		Title: "Hello world",
 		Body:  "isi content halo dunia",
 	}
-	tmpl, err := template.ParseFiles("views/helloworld.html")
+	tmpl, err := template.ParseFiles("views/home.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
